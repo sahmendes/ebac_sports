@@ -1,42 +1,38 @@
-import { Produto as ProdutoType } from '../../App'
-import * as S from './styles'
+import { type Produto } from '../../styles/types' // Caminho correto para os tipos
+import * as S from './styles' // Estilos do produto
 
 type Props = {
-  produto: ProdutoType
-  aoComprar: (produto: ProdutoType) => void
-  favoritar: (produto: ProdutoType) => void
+  produto: Produto
   estaNosFavoritos: boolean
+  aoComprar: (produto: Produto) => void
+  favoritar: (produto: Produto) => void
 }
-
-export const paraReal = (valor: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-    valor
-  )
 
 const ProdutoComponent = ({
   produto,
+  estaNosFavoritos,
   aoComprar,
-  favoritar,
-  estaNosFavoritos
+  favoritar
 }: Props) => {
   return (
-    <S.Produto>
-      <S.Capa>
-        <img src={produto.imagem} alt={produto.nome} />
-      </S.Capa>
-      <S.Titulo>{produto.nome}</S.Titulo>
-      <S.Prices>
-        <strong>{paraReal(produto.preco)}</strong>
-      </S.Prices>
-      <S.BtnComprar onClick={() => favoritar(produto)} type="button">
-        {estaNosFavoritos
-          ? '- Remover dos favoritos'
-          : '+ Adicionar aos favoritos'}
-      </S.BtnComprar>
-      <S.BtnComprar onClick={() => aoComprar(produto)} type="button">
-        Adicionar ao carrinho
-      </S.BtnComprar>
-    </S.Produto>
+    <S.ProdutoContainer>
+      <S.ProdutoImagem src={produto.imagem} alt={produto.nome} />
+      <S.ProdutoInfo>
+        <strong>{produto.nome}</strong>
+        <p>Preço: R$ {produto.preco.toLocaleString('pt-BR')}</p>
+        <S.BotoesContainer>
+          <S.Botao onClick={() => aoComprar(produto)}>
+            Adicionar ao carrinho
+          </S.Botao>
+          <S.BotaoFavorito
+            onClick={() => favoritar(produto)}
+            estaNosFavoritos={estaNosFavoritos}
+          >
+            {estaNosFavoritos ? 'Desfavoritar' : 'Favoritar'}
+          </S.BotaoFavorito>
+        </S.BotoesContainer>
+      </S.ProdutoInfo>
+    </S.ProdutoContainer>
   )
 }
 

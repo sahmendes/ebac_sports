@@ -1,88 +1,64 @@
 import styled from 'styled-components'
+import * as S from './styles'
 
-import { cores } from '../../styles'
-
-export const Produto = styled.div``
-
-export const Titulo = styled.h3`
-  min-height: 64px;
-`
-
-export const Capa = styled.div`
-  position: relative;
-
-  img {
-    display: block;
-    width: 100%;
-    margin-bottom: 8px;
-  }
-`
-
-export const Prices = styled.div`
-  margin: 16px 0;
-  color: #fff;
-
-  small {
-    font-size: 16px;
-    text-decoration: line-through;
-    margin-right: 8px;
-    opacity: 0.7;
-  }
-
-  strong {
-    font-size: 18px;
-  }
-`
-
-export const Tag = styled.span`
-  background-color: ${cores.corPrincipal};
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-`
-export const Plataformas = styled.ul`
+// Contêiner do produto
+export const ProdutoContainer = styled.div`
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin: 10px;
+  border-radius: 8px;
   display: flex;
-  flex-wrap: wrap;
-  margin: 8px 0 0;
-
-  li {
-    background-color: ${cores.corPrincipal};
-    padding: 8px;
-    font-size: 10px;
-    white-space: nowrap;
-    margin-right: 8px;
-    margin-bottom: 8px;
-    color: #fff;
-    font-weight: bold;
-  }
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 180px; /* Definir largura máxima */
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 `
-export const BtnComprar = styled.button`
-  display: block;
-  width: 100%;
-  background-image: linear-gradient(
-    45deg,
-    ${cores.corPrincipal},
-    ${cores.corSecundaria}
-  );
-  font-weight: bold;
-  font-size: 16px;
-  padding: 12px 0;
-  text-transform: capitalize;
-  color: #eee;
+
+// Imagem do produto
+export const ProdutoImagem = styled.img`
+  width: 120px; /* Reduzindo ainda mais a largura */
+  height: 120px; /* Mantendo altura fixa */
+  object-fit: contain; /* Mantendo proporção correta */
+  border-radius: 5px;
+  margin-bottom: 8px;
+  height: 100px !important; /* Mantendo proporção */
+  max-width: 100px;
+`
+
+export const ProdutoInfo = styled.div`
+  font-size: 14px;
+  text-align: center;
+`
+
+export const BotoesContainer = styled.div`
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: center;
+`
+
+export const Botao = styled.button`
+  padding: 6px 10px;
+  font-size: 12px;
   border: none;
+  background-color: #007bff;
+  color: white;
   cursor: pointer;
   border-radius: 4px;
-  margin-bottom: 8px;
 
   &:hover {
-    background-image: linear-gradient(
-      -45deg,
-      ${cores.corPrincipal},
-      ${cores.corSecundaria}
-    );
+    background-color: #0056b3;
+  }
+`
+
+export const BotaoFavorito = styled(Botao)<{ estaNosFavoritos: boolean }>`
+  background-color: ${(props) =>
+    props.estaNosFavoritos ? '#dc3545' : '#28a745'};
+
+  &:hover {
+    background-color: ${(props) =>
+      props.estaNosFavoritos ? '#b02a37' : '#218838'};
   }
 `

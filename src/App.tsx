@@ -1,55 +1,54 @@
-import { useEffect, useState } from 'react'
+import { useGetProdutosQuery } from './reducer/cartApi'
 import Header from './components/Header'
 import Produtos from './containers/Produtos'
-
 import { GlobalStyle } from './styles'
-
-export type Produto = {
-  id: number
-  nome: string
-  preco: number
-  imagem: string
-}
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from './store/store'
+import { adicionarAoCarrinho, favoritar } from './reducer/cartSlice'
+import { Produto } from './reducer/cartApi'
+import Carrinho from './components/Carrinho'
 
 function App() {
-  const [produtos, setProdutos] = useState<Produto[]>([])
-  const [carrinho, setCarrinho] = useState<Produto[]>([])
-  const [favoritos, setFavoritos] = useState<Produto[]>([])
+  const dispatch = useDispatch<AppDispatch>()
+  const { data: produtos, error, isLoading } = useGetProdutosQuery()
 
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/ebac_sports')
-      .then((res) => res.json())
-      .then((res) => setProdutos(res))
-  }, [])
+  // Pegando o estado do Redux
+  const itensNoCarrinho = useSelector((state: RootState) => state.cart.itens)
+  const favoritos = useSelector((state: RootState) => state.cart.favoritos)
 
-  function adicionarAoCarrinho(produto: Produto) {
-    if (carrinho.find((p) => p.id === produto.id)) {
-      alert('Item já adicionado')
-    } else {
-      setCarrinho([...carrinho, produto])
-    }
+  const handleAdicionarAoCarrinho = (produto: Produto) => {
+    dispatch(adicionarAoCarrinho(produto))
   }
 
-  function favoritar(produto: Produto) {
-    if (favoritos.find((p) => p.id === produto.id)) {
-      const favoritosSemProduto = favoritos.filter((p) => p.id !== produto.id)
-      setFavoritos(favoritosSemProduto)
-    } else {
-      setFavoritos([...favoritos, produto])
-    }
+  const handleFavoritar = (produto: Produto) => {
+    dispatch(favoritar(produto))
+  }
+
+  const removerDoCarrinho = (id: number) => {
+    dispatch({ type: 'cart/removerDoCarrinho', payload: id })
   }
 
   return (
     <>
+      <Carrinho
+        itensNoCarrinho={itensNoCarrinho}
+        removerDoCarrinho={removerDoCarrinho}
+      />
       <GlobalStyle />
       <div className="container">
-        <Header favoritos={favoritos} itensNoCarrinho={carrinho} />
-        <Produtos
-          produtos={produtos}
-          favoritos={favoritos}
-          favoritar={favoritar}
-          adicionarAoCarrinho={adicionarAoCarrinho}
-        />
+        <Header favoritos={favoritos} itensNoCarrinho={itensNoCarrinho} />
+
+        {isLoading && <p>Carregando...</p>}
+        {error && <p>Erro ao carregar produtos.</p>}
+
+        {!isLoading && !error && (
+          <Produtos
+            produtos={produtos ?? []}
+            favoritos={favoritos}
+            adicionarAoCarrinho={handleAdicionarAoCarrinho}
+            favoritar={handleFavoritar}
+          />
+        )}
       </div>
     </>
   )

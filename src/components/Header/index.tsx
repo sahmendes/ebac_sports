@@ -1,32 +1,16 @@
-import * as S from './styles'
+import { Produto } from '../../styles/types' // Corrigido!
 
-import { Produto } from '../../App'
-
-import cesta from '../../assets/cesta.png'
-import { paraReal } from '../Produto'
-
-type Props = {
-  itensNoCarrinho: Produto[]
+type HeaderProps = {
   favoritos: Produto[]
+  itensNoCarrinho: Produto[]
 }
 
-const Header = ({ itensNoCarrinho, favoritos }: Props) => {
-  const valorTotal = itensNoCarrinho.reduce((acc, item) => {
-    acc += item.preco
-    return acc
-  }, 0)
-
+const Header = ({ favoritos, itensNoCarrinho }: HeaderProps) => {
   return (
-    <S.Header>
-      <h1>EBAC Sports</h1>
-      <div>
-        <span>{favoritos.length} favoritos</span>
-        <img src={cesta} />
-        <span>
-          {itensNoCarrinho.length} itens, valor total: {paraReal(valorTotal)}
-        </span>
-      </div>
-    </S.Header>
+    <header>
+      <p>Favoritos: {favoritos.length}</p>
+      <p>Carrinho: {itensNoCarrinho.length}</p>
+    </header>
   )
 }
 
